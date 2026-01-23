@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leopa Color</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .color-box {
+            width: 200px;
+            height: 200px;
+            border: 2px solid #333;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+            font-size: 18px;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Leopa Color Demo</h1>
+    <p>Click a button to load a color:</p>
+
+    <div>
+        <button hx-get="/color/red" hx-target="#color-display" hx-swap="innerHTML">Red</button>
+        <button hx-get="/color/green" hx-target="#color-display" hx-swap="innerHTML">Green</button>
+        <button hx-get="/color/blue" hx-target="#color-display" hx-swap="innerHTML">Blue</button>
+        <button hx-get="/color/yellow" hx-target="#color-display" hx-swap="innerHTML">Yellow</button>
+        <button hx-get="/color/purple" hx-target="#color-display" hx-swap="innerHTML">Purple</button>
+    </div>
+
+    <div id="color-display">
+        <div class="color-box" style="background-color: #CCCCCC;">
+            Select a color
+        </div>
+    </div>
+
+    <script>
+        document.body.addEventListener('htmx:afterRequest', function(evt) {
+            const response = JSON.parse(evt.detail.xhr.responseText);
+            document.getElementById('color-display').innerHTML =
+                `<div class="color-box" style="background-color: ${response.hex}">
+                    ${response.name}: ${response.hex}
+                </div>`;
+        });
+    </script>
+</body>
+</html>
