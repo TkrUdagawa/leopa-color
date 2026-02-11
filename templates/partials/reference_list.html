@@ -1,0 +1,18 @@
+{% if references %}
+<div class="reference-grid" id="reference-grid">
+    {% for ref in references %}
+    <div class="reference-item" data-ref-id="{{ ref.id }}">
+        <img src="{{ ref.url }}" alt="{{ ref.filename }}">
+        <div class="overlay">
+            <div class="checkbox">&#10003;</div>
+            <button type="button" class="delete-btn" title="Delete">&times;</button>
+        </div>
+        <div class="filename">{{ ref.filename }}</div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state" id="no-references">
+    <p>No reference images yet. Upload some color photos of your leopard gecko to get started.</p>
+</div>
+{% endif %}
