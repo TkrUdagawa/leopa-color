@@ -1,0 +1,38 @@
+{% if status == "processing" %}
+<div class="status-message processing">
+    <div class="spinner"></div>
+    <span>{{ message | default("Processing...") }}</span>
+</div>
+{% elif status == "completed" %}
+<div class="status-message success">
+    <span style="color: var(--success-color); font-size: 24px;">&#10003;</span>
+    <span>Colorization complete!</span>
+</div>
+<div class="result-comparison">
+    <div class="result-image-container">
+        <h3>Original (Infrared)</h3>
+        <img src="{{ infrared_url }}" alt="Original infrared image">
+    </div>
+    <div class="result-image-container">
+        <h3>Colorized Result</h3>
+        <img src="{{ result_url }}" alt="Colorized image">
+    </div>
+</div>
+<div class="result-actions">
+    <a href="{{ result_url }}" download class="btn btn-success">Download Result</a>
+    <a href="/colorize" class="btn btn-secondary">Colorize Another</a>
+</div>
+{% elif status == "failed" %}
+<div class="status-message error">
+    <span style="color: var(--error-color); font-size: 24px;">&#10005;</span>
+    <span>{{ error_message | default("Colorization failed") }}</span>
+</div>
+<div class="result-actions">
+    <a href="/colorize" class="btn btn-secondary">Try Again</a>
+</div>
+{% else %}
+<div class="status-message">
+    <div class="spinner"></div>
+    <span>Waiting to start...</span>
+</div>
+{% endif %}

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colorize - Leopa Color</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Leopa Color</h1>
+        <p class="subtitle">Colorize infrared images of your leopard gecko using AI</p>
+
+        <!-- Reference Images Section -->
+        <div class="card">
+            <h2>Reference Images</h2>
+            <p style="color: var(--text-muted); margin-bottom: 16px;">
+                Upload color photos of your leopard gecko. These will be used as style references for colorization.
+            </p>
+
+            {% if references %}
+            <div class="reference-grid" id="reference-grid">
+                {% for ref in references %}
+                <div class="reference-item" data-ref-id="{{ ref.id }}">
+                    <img src="{{ ref.url }}" alt="{{ ref.filename }}">
+                    <div class="overlay">
+                        <div class="checkbox">&#10003;</div>
+                        <button type="button" class="delete-btn" title="Delete">&times;</button>
+                    </div>
+                    <div class="filename">{{ ref.filename }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state" id="no-references">
+                <p>No reference images yet. Upload some color photos of your leopard gecko to get started.</p>
+            </div>
+            {% endif %}
+
+            <div class="drop-zone" id="reference-drop-zone">
+                <input type="file" class="file-input" accept="image/jpeg,image/png,image/gif,image/webp">
+                <div class="drop-zone-icon">+</div>
+                <div class="drop-zone-text">Drop a reference image here or click to upload</div>
+                <div class="drop-zone-hint">JPEG, PNG, GIF, or WebP (max 10MB)</div>
+            </div>
+        </div>
+
+        <!-- Colorization Section -->
+        <div class="card">
+            <h2>Colorize Infrared Image</h2>
+            <p style="color: var(--text-muted); margin-bottom: 16px;">
+                Upload an infrared image from your pet camera, select reference images above, and click Colorize.
+            </p>
+
+            <form id="colorize-form">
+                <div class="drop-zone" id="infrared-drop-zone">
+                    <input type="file" class="file-input" accept="image/jpeg,image/png,image/gif,image/webp">
+                    <div class="drop-zone-icon">&#128247;</div>
+                    <div class="drop-zone-text">Drop an infrared image here or click to upload</div>
+                    <div class="drop-zone-hint">JPEG, PNG, GIF, or WebP (max 10MB)</div>
+                </div>
+
+                <div id="infrared-preview"></div>
+
+                <div style="margin-top: 20px; text-align: center;">
+                    <button type="submit" id="colorize-btn" class="btn btn-primary" disabled>
+                        Colorize
+                    </button>
+                </div>
+            </form>
+
+            <div id="status-container" class="status-container"></div>
+            <div id="result-container" class="result-container"></div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="card">
+            <h2>How It Works</h2>
+            <ol style="color: var(--text-muted); line-height: 2;">
+                <li><strong>Upload Reference Images:</strong> Add color photos of your leopard gecko. The AI will learn the colors and patterns from these images.</li>
+                <li><strong>Select References:</strong> Click on reference images to select which ones to use (blue border = selected).</li>
+                <li><strong>Upload Infrared Image:</strong> Drop or select an infrared image from your pet camera.</li>
+                <li><strong>Colorize:</strong> Click the Colorize button and wait for the AI to process the image.</li>
+                <li><strong>Download:</strong> Once complete, download your colorized image!</li>
+            </ol>
+        </div>
+    </div>
+
+    <script src="/static/js/upload.js"></script>
+</body>
+</html>
