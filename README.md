@@ -1,6 +1,14 @@
 # leopa-color
 
-A FastAPI + htmx color demonstration application.
+Infrared image colorization web app for leopard gecko pet cameras. Uses AI (Replicate API with IP-Adapter SDXL) to colorize infrared/night vision images using reference color photos.
+
+## Features
+
+- Upload reference color images of your leopard gecko
+- Upload infrared images from pet cameras
+- AI-powered colorization using style transfer
+- Drag-and-drop UI with real-time progress updates
+- Download colorized results
 
 ## Setup
 
@@ -16,7 +24,19 @@ uv sync
 uv run pre-commit install
 ```
 
-## Development
+### Configuration
+
+1. Copy the environment template:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Get a Replicate API token from https://replicate.com and add it to `.env`:
+   ```
+   REPLICATE_API_TOKEN=r8_xxxxx
+   ```
+
+## Usage
 
 ### Running the Application
 
@@ -24,7 +44,34 @@ uv run pre-commit install
 uv run uvicorn leopa_color.main:app --reload
 ```
 
-Visit http://localhost:8000 in your browser.
+Visit http://localhost:8000/colorize in your browser.
+
+### How to Colorize Images
+
+1. **Upload Reference Images**: Add color photos of your leopard gecko. These teach the AI what colors to use.
+
+2. **Select References**: Click on reference images to select them (blue border = selected).
+
+3. **Upload Infrared Image**: Drag and drop an infrared image from your pet camera.
+
+4. **Colorize**: Click the Colorize button and wait for processing.
+
+5. **Download**: Once complete, download your colorized image.
+
+## API Endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/colorize` | Main colorization UI |
+| POST | `/api/colorize` | Start colorization job |
+| GET | `/api/colorize/{job_id}` | Check job status |
+| GET | `/api/colorize/{job_id}/result` | Download result image |
+| GET | `/api/references` | List reference images |
+| POST | `/api/references` | Upload reference image |
+| GET | `/api/references/{id}` | Get reference image |
+| DELETE | `/api/references/{id}` | Delete reference image |
+
+## Development
 
 ### Testing
 
@@ -64,13 +111,34 @@ uv run pre-commit run --all-files
 
 ```
 leopa-color/
-├── src/
-│   └── leopa_color/      # Application code
-├── tests/                # Test files
-├── templates/            # Jinja2 templates
-├── static/               # Static files (CSS, JS, images)
-├── .github/
-│   └── workflows/        # GitHub Actions CI
-├── pyproject.toml        # Project configuration
-└── .pre-commit-config.yaml  # Pre-commit configuration
+├── src/leopa_color/
+│   ├── main.py              # FastAPI application
+│   ├── config.py            # Settings management
+│   ├── models.py            # Pydantic models
+│   ├── routers/
+│   │   ├── colorize.py      # Colorization endpoints
+│   │   └── references.py    # Reference image endpoints
+│   └── services/
+│       ├── replicate_service.py  # Replicate API integration
+│       └── storage_service.py    # Image storage management
+├── templates/               # Jinja2 templates
+├── static/
+│   ├── css/styles.css      # Application styles
+│   └── js/upload.js        # Upload and UI logic
+├── tests/                  # Test files
+├── data/                   # Image storage (gitignored)
+│   ├── references/         # Reference color images
+│   ├── uploads/            # Uploaded infrared images
+│   └── results/            # Colorized results
+├── .github/workflows/      # GitHub Actions CI
+├── pyproject.toml          # Project configuration
+└── .pre-commit-config.yaml # Pre-commit configuration
 ```
+
+## Technology Stack
+
+- **Backend**: FastAPI, Python 3.12+
+- **Frontend**: htmx, vanilla JavaScript
+- **Templates**: Jinja2
+- **AI**: Replicate API (IP-Adapter SDXL)
+- **Package Manager**: uv
